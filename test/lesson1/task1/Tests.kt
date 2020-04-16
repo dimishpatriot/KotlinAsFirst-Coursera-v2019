@@ -12,6 +12,7 @@ class Tests {
         assertEquals(0, sqr(0))
         assertEquals(4, sqr(2))
         assertEquals(9, sqr(-3))
+        assertEquals(144, sqr(12))
     }
 
     @Test

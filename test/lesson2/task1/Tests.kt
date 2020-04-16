@@ -35,10 +35,15 @@ class Tests {
     @Tag("Easy")
     fun ageDescription() {
         assertEquals("1 год", ageDescription(1))
-        assertEquals("21 год", ageDescription(21))
-        assertEquals("132 года", ageDescription(132))
+        assertEquals("2 года", ageDescription(2))
+        assertEquals("9 лет", ageDescription(9))
+        assertEquals("11 лет", ageDescription(11))
         assertEquals("12 лет", ageDescription(12))
+        assertEquals("21 год", ageDescription(21))
         assertEquals("111 лет", ageDescription(111))
+        assertEquals("114 лет", ageDescription(114))
+        assertEquals("124 года", ageDescription(124))
+        assertEquals("132 года", ageDescription(132))
         assertEquals("199 лет", ageDescription(199))
     }
 
@@ -65,6 +70,8 @@ class Tests {
         assertEquals(0, rookOrBishopThreatens(4, 5, 5, 7, 8, 8))
         assertEquals(1, rookOrBishopThreatens(2, 8, 6, 8, 1, 6))
         assertEquals(2, rookOrBishopThreatens(5, 4, 3, 7, 1, 8))
+        assertEquals(2, rookOrBishopThreatens(1, 1, 3, 7, 3, 3))
+        assertEquals(0, rookOrBishopThreatens(1, 1, 3, 7, 3, 4))
         assertEquals(3, rookOrBishopThreatens(1, 6, 7, 6, 3, 8))
     }
 
