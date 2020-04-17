@@ -6,7 +6,6 @@ import lesson1.task1.discriminant
 import lesson1.task1.sqr
 import kotlin.math.max
 import kotlin.math.sqrt
-import kotlin.math.tan
 
 /*
  * Найти число корней квадратного уравнения ax^2 + bx + c = 0
@@ -105,8 +104,8 @@ fun whichRookThreatens(
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
 ): Int {
-    var dangerOne: Boolean = false
-    var dangerTwo: Boolean = false
+    var dangerOne = false
+    var dangerTwo = false
 
     if (kingX == rookX1 || kingY == rookY1)
         dangerOne = true
@@ -203,7 +202,20 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
     return when {
-        b <= c && d <= a -> -1
-        else -> TODO()
+        // A-----B....c-----d
+        // c-----d....A-----B
+        b < c || d < a -> -1
+
+        // c--A---B--d
+        c <= a && b <= d -> b - a
+
+        // c--A--d---B
+        c <= a && d <= b -> d - a
+
+        // A---c--B--d
+        a <= c && b <= d -> b - c
+
+        // A--c--d--B
+        else -> d - c
     }
 }
