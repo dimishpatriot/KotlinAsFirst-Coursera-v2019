@@ -192,6 +192,7 @@ class Tests {
         assertEquals(-1.0, cos(PI, 1e-5), 1e-5)
         assertEquals(0.0, cos(3.0 * PI / 2.0, 1e-5), 1e-5)
         assertEquals(1.0, cos(100 * PI, 1e-5), 1e-5)
+        assertEquals(0.0, cos(2.5 * PI, 1e-5), 1e-5)
         assertNotEquals(kotlin.math.cos(1.0), cos(1.0, 1.0))
         assertNotEquals(kotlin.math.cos(0.5), cos(-0.5, 1.0))
     }
@@ -234,7 +235,11 @@ class Tests {
         assertEquals(4, squareSequenceDigit(2))
         assertEquals(5, squareSequenceDigit(7))
         assertEquals(6, squareSequenceDigit(12))
+        assertEquals(1, squareSequenceDigit(15))
+        assertEquals(1, squareSequenceDigit(16))
         assertEquals(0, squareSequenceDigit(17))
+        assertEquals(4, squareSequenceDigit(23))
+        assertEquals(4, squareSequenceDigit(23))
         assertEquals(9, squareSequenceDigit(27))
     }
 

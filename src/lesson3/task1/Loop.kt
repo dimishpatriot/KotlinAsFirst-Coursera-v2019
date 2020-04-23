@@ -2,8 +2,9 @@
 
 package lesson3.task1
 
-import kotlin.math.min
-import kotlin.math.sqrt
+import lesson1.task1.sqr
+import kotlin.math.*
+import kotlin.math.pow
 
 /* Вычисление факториала */
 fun factorial(n: Int): Double =
@@ -183,7 +184,22 @@ fun collatzSteps(x: Int): Int {
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
-fun sin(x: Double, eps: Double): Double = TODO()
+fun sin(x: Double, eps: Double): Double {
+    var x: Double = x
+    while (x < -2 * PI || x > 2 * PI)
+        x = x % PI + PI
+    var sinX: Double = 0.0
+    var member = x
+    var grade = 1
+    var sign = 1
+    do {
+        sinX += sign * member
+        grade += 2
+        sign *= -1
+        member = x.pow(grade) / factorial(grade)
+    } while (abs(member) >= eps)
+    return sinX
+}
 
 /**
  * Средняя
@@ -194,7 +210,22 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
-fun cos(x: Double, eps: Double): Double = TODO()
+fun cos(x: Double, eps: Double): Double {
+    var x: Double = x
+    while (x < -2 * PI || x > 2 * PI)
+        x = -x % PI
+    var cosX = 0.0
+    var member = 1.0
+    var grade = 0
+    var sign = 1
+    do {
+        cosX += sign * member
+        grade += 2
+        sign *= -1
+        member = x.pow(grade) / factorial(grade)
+    } while (abs(member) >= eps)
+    return cosX
+}
 
 /**
  * Средняя
@@ -203,47 +234,96 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var n = n
+    var answer = 0
+    do {
+        answer = answer * 10 + n % 10
+        n /= 10
+    } while (n > 0)
+    return answer
+}
 
 /**
  * Средняя
- *
  * Проверить, является ли заданное число n палиндромом:
  * первая цифра равна последней, вторая -- предпоследней и так далее.
  * 15751 -- палиндром, 3653 -- нет.
- *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean =
+    n == revert(n)
 
 /**
  * Средняя
- *
  * Для заданного числа n определить, содержит ли оно различающиеся цифры.
  * Например, 54 и 323 состоят из разных цифр, а 111 и 0 из одинаковых.
- *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    var n = n
+    val num = n % 10
+    do {
+        if (num != n % 10) return true
+        n /= 10
+    } while (n > 0)
+    return false
+}
 
 /**
  * Сложная
- *
  * Найти n-ю цифру последовательности из квадратов целых чисел:
  * 149162536496481100121144...
  * Например, 2-я цифра равна 4, 7-я 5, 12-я 6.
- *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    if (n == 0) return 0
+    var count = 0
+    var i = 1
+    var seqNum = 0
+    var currentSqr = 0
+    var digits: Int
+
+    /* make sequence with self length >= n */
+    while (count < n) {
+        currentSqr = sqr(i)
+        digits = digitNumber(currentSqr)
+        count += digits
+        seqNum = ((10.0).pow(digits.toDouble()) * seqNum + currentSqr).toInt()
+        i++
+    }
+    for (i in 0 until (count - n))
+        currentSqr /= 10
+
+    return currentSqr % 10
+}
 
 /**
  * Сложная
- *
  * Найти n-ю цифру последовательности из чисел Фибоначчи (см. функцию fib выше):
  * 1123581321345589144...
  * Например, 2-я цифра равна 1, 9-я 2, 14-я 5.
- *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    if (n == 0) return 0
+    var count = 0
+    var i = 1
+    var seqNum = 0
+    var currentSqr = 0
+    var digits: Int
+
+    /* make sequence with self length >= n */
+    while (count < n) {
+        currentSqr = fib(i)
+        digits = digitNumber(currentSqr)
+        count += digits
+        seqNum = ((10.0).pow(digits.toDouble()) * seqNum + currentSqr).toInt()
+        i++
+    }
+    for (i in 0 until (count - n))
+        currentSqr /= 10
+
+    return currentSqr % 10
+}
