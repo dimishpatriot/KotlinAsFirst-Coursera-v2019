@@ -4,7 +4,6 @@ package lesson5.task1
 
 /**
  * Пример
- *
  * Для заданного списка покупок `shoppingList` посчитать его общую стоимость
  * на основе цен из `costs`. В случае неизвестной цены считать, что товар
  * игнорируется.
@@ -27,7 +26,6 @@ fun shoppingListCost(
 
 /**
  * Пример
- *
  * Для набора "имя"-"номер телефона" `phoneBook` оставить только такие пары,
  * для которых телефон начинается с заданного кода страны `countryCode`
  */
@@ -50,7 +48,6 @@ fun filterByCountryCode(
 
 /**
  * Пример
- *
  * Для заданного текста `text` убрать заданные слова-паразиты `fillerWords`
  * и вернуть отфильтрованный текст
  */
@@ -71,7 +68,6 @@ fun removeFillerWords(
 
 /**
  * Пример
- *
  * Для заданного текста `text` построить множество встречающихся в нем слов
  */
 fun buildWordSet(text: List<String>): MutableSet<String> {
@@ -83,125 +79,189 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
 
 /**
  * Простая
- *
  * По заданному ассоциативному массиву "студент"-"оценка за экзамен" построить
  * обратный массив "оценка за экзамен"-"список студентов с этой оценкой".
- *
  * Например:
  *   buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
-fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
+fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
+    val res = mutableMapOf<Int, MutableList<String>>()
+
+    for ((name, grade) in grades) {
+        if (res[grade] == null)
+            res[grade] = mutableListOf(name)
+        else
+            res[grade]?.add(name)
+    }
+
+    for (grade in res) {
+        grade.value.toList()
+    }
+    return res.toMap()
+}
 
 /**
  * Простая
- *
  * Определить, входит ли ассоциативный массив a в ассоциативный массив b;
  * это выполняется, если все ключи из a содержатся в b с такими же значениями.
- *
  * Например:
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
-fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = TODO()
+fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
+    for ((key, _) in a) {
+        if (b[key] == null || a[key] != b[key]) return false
+    }
+    return true
+}
 
 /**
  * Простая
- *
  * Удалить из изменяемого ассоциативного массива все записи,
  * которые встречаются в заданном ассоциативном массиве.
  * Записи считать одинаковыми, если и ключи, и значения совпадают.
- *
  * ВАЖНО: необходимо изменить переданный в качестве аргумента
  *        изменяемый ассоциативный массив
- *
  * Например:
  *   subtractOf(a = mutableMapOf("a" to "z"), mapOf("a" to "z"))
  *     -> a changes to mutableMapOf() aka becomes empty
  */
-fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit = TODO()
+fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
+    for ((key, _) in b) {
+        if (key in a && a[key] == b[key])
+            a -= key
+    }
+}
 
 /**
  * Простая
- *
  * Для двух списков людей найти людей, встречающихся в обоих списках.
  * В выходном списке не должно быть повторяюихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> =
+    a.toSet().intersect(b.toSet()).toList()
 
 /**
  * Средняя
- *
  * Объединить два ассоциативных массива `mapA` и `mapB` с парами
  * "имя"-"номер телефона" в итоговый ассоциативный массив, склеивая
  * значения для повторяющихся ключей через запятую.
  * В случае повторяющихся *ключей* значение из mapA должно быть
  * перед значением из mapB.
- *
  * Повторяющиеся *значения* следует добавлять только один раз.
- *
  * Например:
  *   mergePhoneBooks(
  *     mapOf("Emergency" to "112", "Police" to "02"),
  *     mapOf("Emergency" to "911", "Police" to "02")
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
-fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> = TODO()
+fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
+    val map = mapA.toMutableMap()
+    for ((k, v) in mapB)
+        when (k) {
+            in map -> if (map[k] != v)
+                map[k] = map[k] + ", $v"
+            else -> map += (k to v)
+        }
+    return map
+}
 
 /**
  * Средняя
- *
  * Для заданного списка пар "акция"-"стоимость" вернуть ассоциативный массив,
  * содержащий для каждой акции ее усредненную стоимость.
- *
  * Например:
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+    val average = mutableMapOf<String, Double>()
+    val count = mutableMapOf<String, Int>()
+
+    for ((name, price) in stockPrices) {
+        if (average[name] != null) {
+            average[name] = average[name]!!.toDouble() + price
+            count[name] = count[name]!!.toInt() + 1
+        } else {
+            average[name] = price
+            count[name] = 1
+        }
+    }
+
+    for ((name, value) in average) {
+        average[name] = value / count[name]!!
+    }
+
+    return average.toMap()
+}
 
 /**
  * Средняя
- *
  * Входными данными является ассоциативный массив
  * "название товара"-"пара (тип товара, цена товара)"
  * и тип интересующего нас товара.
  * Необходимо вернуть название товара заданного типа с минимальной стоимостью
  * или null в случае, если товаров такого типа нет.
- *
  * Например:
  *   findCheapestStuff(
  *     mapOf("Мария" to ("печенье" to 20.0), "Орео" to ("печенье" to 100.0)),
  *     "печенье"
  *   ) -> "Мария"
  */
-fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? = TODO()
+fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
+    var stuffName: String? = null
+    var cost: Double? = null
+
+    for ((name, pair) in stuff) {
+        if (kind == pair.first) {
+            if (cost == null) {
+                stuffName = name
+                cost = pair.second
+            } else
+                if (pair.second < cost) {
+                    stuffName = name
+                    cost = pair.second
+                }
+        }
+    }
+    return stuffName
+}
 
 /**
  * Средняя
- *
  * Для заданного набора символов определить, можно ли составить из него
  * указанное слово (регистр символов игнорируется)
- *
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
+fun canBuildFrom(chars: List<Char>, word: String): Boolean =
+    (chars.toSet() == word.toSet())
 
 /**
  * Средняя
- *
  * Найти в заданном списке повторяющиеся элементы и вернуть
  * ассоциативный массив с информацией о числе повторений
  * для каждого повторяющегося элемента.
  * Если элемент встречается только один раз, включать его в результат
  * не следует.
- *
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
+fun extractRepeats(list: List<String>): Map<String, Int> {
+    val repeat = mutableMapOf<String, Int>()
+    repeat.apply {
+        for (i in list.toSet())
+            this[i] = 1
+    }
+
+    for (char in list) {
+        TODO()
+    }
+
+    return repeat
+}
 
 /**
  * Средняя
